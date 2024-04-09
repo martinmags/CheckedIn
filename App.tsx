@@ -1,68 +1,37 @@
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {LoginScreen} from './screens/LoginScreen';
+import {CreateAccountScreen} from './screens/CreateAccountScreen';
+import {HomeScreen} from './screens/HomeScreen';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+// TODO: Fix Route typing
+type RootStackParamList = {
+  Login: undefined;
+  CreateAccount: undefined;
+  Home: undefined;
+};
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  return (
-    <View style={styles.sectionContainer}>
-      <Text style={[
-          styles.sectionTitle,
-        ]} >
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+// TODO Setup routing to go to CreateAccountScreen if new account, else route to HomeScreen
+// https://reactnavigation.org/docs/auth-flow
 
 function App(): React.JSX.Element {
   return (
-    <SafeAreaView>
-      <StatusBar/>
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <View>
-          <Section title="Checked In">
-            <Text style={styles.highlight}>this is the home page</Text>
-          </Section>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      {/* TODO: Change initialRouteName to Home once we setup auth routing */}
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen
+          name="Login"
+          options={{headerShown: false}}
+          component={LoginScreen}
+        />
+        <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 32,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 16,
-    fontStyle: 'normal',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
