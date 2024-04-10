@@ -4,6 +4,8 @@ import {
   getAuth,
   initializeAuth,
   getReactNativePersistence,
+  onAuthStateChanged,
+  signOut,
 } from 'firebase/auth';
 import Config from 'react-native-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,4 +26,4 @@ const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
 
-export {auth, app, db, getAuth};
+export {auth, app, db, getAuth, onAuthStateChanged, signOut};
