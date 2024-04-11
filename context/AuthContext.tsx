@@ -13,6 +13,7 @@ import {
 import {User as FirebaseUser} from 'firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
+import {addUserToFirestore} from '../utils/addUserToFirestore';
 
 // Define the shape of your context
 interface AuthContextType {
@@ -62,7 +63,10 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
     try {
       await GoogleSignin.hasPlayServices();
       const {user}: any = await GoogleSignin.signIn();
+      // Store user info in the client side AuthContext
       setUser(user);
+      // Store user in Firebase Firestore cloud
+      addUserToFirestore(user);
     } catch (error: any) {
       console.log(error);
     }

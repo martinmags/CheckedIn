@@ -1,11 +1,9 @@
-// Handles Routing
 import React from 'react';
 import {LoginScreen} from './screens/LoginScreen';
 import {HomeScreen} from './screens/HomeScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useAuth} from './context/AuthContext';
 
-// TODO: Separate all typing into a typing file
 // TODO: Fix Route typing
 type RootStackParamList = {
   Login: undefined;
@@ -14,6 +12,11 @@ type RootStackParamList = {
 };
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+/**
+ * Handles navigation and determines authentication flow
+ *
+ * @returns
+ */
 const StackNavigator = () => {
   const {user} = useAuth();
 

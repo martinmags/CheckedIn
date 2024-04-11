@@ -1,5 +1,11 @@
 import {initializeApp, getApps, getApp} from 'firebase/app';
-import {getFirestore} from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  addDoc,
+} from 'firebase/firestore';
 import {
   getAuth,
   initializeAuth,
@@ -26,4 +32,15 @@ const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
 
-export {auth, app, db, getAuth, onAuthStateChanged, signOut};
+export {
+  auth,
+  app,
+  db,
+  collection,
+  doc,
+  setDoc,
+  addDoc,
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+};
