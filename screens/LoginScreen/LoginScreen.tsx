@@ -2,8 +2,11 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {GoogleSigninButton} from '@react-native-google-signin/google-signin';
 import styles from './LoginScreen.styles.ts';
+import {useAuth} from '../../context/AuthContext.tsx';
 
-const LoginScreen = ({googleSignIn}: {googleSignIn: any}) => {
+const LoginScreen = () => {
+  const {googleSignIn} = useAuth();
+
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}></View>
