@@ -1,15 +1,17 @@
-import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {AuthProvider} from './context/AuthContext';
-import StackNavigator from './StackNavigator';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { AuthProvider } from "./context/AuthContext";
+import StackNavigator from "./StackNavigator";
 
 function App(): React.JSX.Element {
   return (
-    <NavigationContainer>
-      <AuthProvider>
-        <StackNavigator />
-      </AuthProvider>
-    </NavigationContainer>
+    <NavigationContainer
+      children={
+        <AuthProvider>
+          <StackNavigator />
+        </AuthProvider>
+      }
+    />
   );
 }
 

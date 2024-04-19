@@ -1,9 +1,4 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json",
-  "compilerOptions": {
-    "plugins": [{"name": "typescript-plugin-css-modules"}],
-    "paths": {
-      "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
-    }
-  }
+  "compilerOptions": {},
+  "extends": "expo/tsconfig.base"
 }

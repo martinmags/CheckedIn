@@ -1,1 +1,1 @@
-export {default as HomeScreen} from './HomeScreen.tsx';
+export { default as HomeScreen } from "./HomeScreen";

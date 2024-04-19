@@ -1,8 +1,8 @@
-import React from 'react';
-import {LoginScreen} from './screens/LoginScreen';
-import {HomeScreen} from './screens/HomeScreen';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useAuth} from './context/AuthContext';
+import React from "react";
+import { LoginScreen } from "./screens/LoginScreen";
+import { HomeScreen } from "./screens/HomeScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useAuth } from "./context/AuthContext";
 
 // TODO: Fix Route typing
 type RootStackParamList = {
@@ -18,7 +18,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
  * @returns
  */
 const StackNavigator = () => {
-  const {user} = useAuth();
+  const { user } = useAuth();
 
   const authenticatedRoutes = (
     <Stack.Navigator>
@@ -32,11 +32,13 @@ const StackNavigator = () => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       {/* ...plus other non authenticated routes */}
     </Stack.Navigator>
   );
+
+  // return nonAuthenticatedRoutes;
 
   return user ? authenticatedRoutes : nonAuthenticatedRoutes;
 };

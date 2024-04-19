@@ -1,10 +1,10 @@
 // TODO
-import {View, Text, Button} from 'react-native';
-import {useAuth} from '../../context/AuthContext';
-import React from 'react';
+import { View, Text, Button } from "react-native";
+import { useAuth } from "../../context/AuthContext";
+import React from "react";
 
 const HomeScreen = () => {
-  const {signOut} = useAuth();
+  const { signOut } = useAuth();
   return (
     <View>
       <Text>HomeScreen</Text>
