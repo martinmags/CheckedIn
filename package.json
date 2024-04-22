@@ -15,7 +15,7 @@
     "@types/react": "~18.2.45",
     "expo": "~50.0.14",
     "expo-application": "~5.8.4",
-    "expo-auth-session": "~5.4.0",
+    "expo-auth-session": "^5.4.0",
     "expo-crypto": "~12.8.1",
     "expo-dev-client": "~3.3.11",
     "expo-status-bar": "~1.11.1",

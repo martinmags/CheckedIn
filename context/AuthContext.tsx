@@ -12,15 +12,16 @@ import {
   signInWithCredential,
   GoogleAuthProvider,
 } from "../firebase";
-import { User as FirebaseUser } from "firebase/auth";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 
-// import {addUserToFirestore} from '../utils/addUserToFirestore';
+import { addUserToFirestore } from "../utils/addUserToFirestore";
+import { makeRedirectUri } from "expo-auth-session";
 
+// TODO: HANDLE ASYNC STOAGE
 // Define the shape of your context
 interface AuthContextType {
-  user: FirebaseUser | null;
+  user: {};
   googleSignIn: () => {};
   signOut: () => Promise<void>;
 }
@@ -36,8 +37,13 @@ WebBrowser.maybeCompleteAuthSession();
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [user, setUser] = useState(null);
   const [request, response, googleSignIn] = Google.useAuthRequest({
+    redirectUri: makeRedirectUri({
+      scheme: "com.martinimugs.checkedin",
+    }),
+    expoClientId: process.env.EXPO_PUBLIC_FIREBASE_EXPO_CLIENT_ID,
+    webClientId: process.env.EXPO_PUBLIC_FIREBASE_WEB_CLIENT_ID,
     iosClientId: process.env.EXPO_PUBLIC_FIREBASE_IOS_CLIENT_ID,
     androidClientId: process.env.EXPO_PUBLIC_FIREBASE_ANDROID_CLIENT_ID,
   });
@@ -47,14 +53,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const { id_token, access_token } = response?.params;
 
       //@ts-ignore
-      const credential = GoogleAuthProvider.credential(id_token, access_token);
+      const credential = GoogleAuthProvider.credential(id_token);
       signInWithCredential(auth, credential);
     }
   }, [response]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
+      if (firebaseUser) {
+        const userInfo = {
+          displayName: firebaseUser?.displayName,
+          isAnonymous: firebaseUser?.isAnonymous,
+          emailVerified: firebaseUser?.emailVerified,
+          ...firebaseUser?.providerData?.at(0),
+        };
+        setUser(userInfo);
+        addUserToFirestore(userInfo);
+      } else {
+        console.log("Logged out user");
+      }
     });
     return () => unsubscribe();
   }, []);
