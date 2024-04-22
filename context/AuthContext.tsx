@@ -86,7 +86,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           photoUrl: firebaseUser?.providerData,
           ...firebaseUser?.providerData?.at(0),
         };
-        console.log("MARTIN", userInfo);
         setUser(userInfo);
         addUserToFirestore(userInfo);
       } else {
