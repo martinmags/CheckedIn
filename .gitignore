@@ -38,5 +38,5 @@ yarn-error.*
 # eas builds
 eas.json
 
-.google-services.json
-.GoogleService-Info.plist
+*.json
+*plist
