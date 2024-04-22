@@ -18,16 +18,34 @@ import * as WebBrowser from "expo-web-browser";
 import { addUserToFirestore } from "../utils/addUserToFirestore";
 import { makeRedirectUri } from "expo-auth-session";
 
+interface User {
+  displayName: string | null;
+  email?: string | null;
+  phoneNumber?: string | null; // Marked as optional in the interface
+  photoURL?: string | null;
+  providerId?: string | undefined;
+  uid?: string | undefined;
+  isAnonymous: boolean;
+  emailVerified: boolean;
+}
 // TODO: HANDLE ASYNC STOAGE
-// Define the shape of your context
 interface AuthContextType {
-  user: {};
+  user: User | null;
   googleSignIn: () => {};
   signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
-  user: null,
+  user:
+    {
+      displayName: "",
+      isAnonymous: false,
+      emailVerified: false,
+      phoneNumber: "",
+      photoURL: "",
+      providerId: "",
+      uid: "",
+    } || null,
   googleSignIn: async () => {},
   signOut: async () => {},
 });
@@ -37,7 +55,7 @@ WebBrowser.maybeCompleteAuthSession();
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [request, response, googleSignIn] = Google.useAuthRequest({
     redirectUri: makeRedirectUri({
       scheme: "com.martinimugs.checkedin",
@@ -65,8 +83,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           displayName: firebaseUser?.displayName,
           isAnonymous: firebaseUser?.isAnonymous,
           emailVerified: firebaseUser?.emailVerified,
+          photoUrl: firebaseUser?.providerData,
           ...firebaseUser?.providerData?.at(0),
         };
+        console.log("MARTIN", userInfo);
         setUser(userInfo);
         addUserToFirestore(userInfo);
       } else {
