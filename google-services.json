@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "329730659910",
+    "project_id": "checkedin-cf697",
+    "storage_bucket": "checkedin-cf697.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329730659910:android:d427a88f8a7fd62fc0dc47",
+        "android_client_info": {
+          "package_name": "com.martinimugs.checkedin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329730659910-4bep63uas3rh5uu36ba9f46e1dph0m9p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.martinimugs.checkedin",
+            "certificate_hash": "c7f8834951d4177e7282db124827eeea4bed503b"
+          }
+        },
+        {
+          "client_id": "329730659910-ddhudgjvi12shg6vrmro7u7m8qq95oj9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfFtfXwiRFgoyuI74XVVX2MWSvQYNjO0Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329730659910-ddhudgjvi12shg6vrmro7u7m8qq95oj9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "329730659910-elqk2ukuo2prgbtl7oskalh8mp90iqe9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.martinimugs.checkedin"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

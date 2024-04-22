@@ -13,15 +13,17 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "com.martinimugs.checkedin",
       "supportsTablet": true,
-      "bundleIdentifier": "com.martinimugs.checkedin"
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
+      "package": "com.martinimugs.checkedin",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.martinimugs.checkedin"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -31,7 +33,7 @@
         "projectId": "35b1dd4e-cc94-4768-8f8d-5566f24450e7"
       }
     },
-    "scheme": "checkedin",
+    "scheme": "com.martinimugs.checkedin",
     "owner": "weebdev"
   }
 }
