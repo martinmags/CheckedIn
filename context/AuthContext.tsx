@@ -4,21 +4,25 @@ import React, {
   useState,
   useEffect,
   ReactNode,
-} from 'react';
+} from "react";
 import {
   auth,
   onAuthStateChanged,
   signOut as FirebaseSignOut,
-} from '../firebase';
-import {User as FirebaseUser} from 'firebase/auth';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import Config from 'react-native-config';
-import {addUserToFirestore} from '../utils/addUserToFirestore';
+  signInWithCredential,
+  GoogleAuthProvider,
+} from "../firebase";
+import * as Google from "expo-auth-session/providers/google";
+import * as WebBrowser from "expo-web-browser";
 
+import { addUserToFirestore } from "../utils/addUserToFirestore";
+import { makeRedirectUri } from "expo-auth-session";
+
+// TODO: HANDLE ASYNC STOAGE
 // Define the shape of your context
 interface AuthContextType {
-  user: FirebaseUser | null;
-  googleSignIn: () => Promise<void>;
+  user: {};
+  googleSignIn: () => {};
   signOut: () => Promise<void>;
 }
 
@@ -28,49 +32,49 @@ const AuthContext = createContext<AuthContextType>({
   signOut: async () => {},
 });
 
-// Custom hook to use the AuthContext
-export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
-  const [user, setUser] = useState<FirebaseUser | null>(null);
+WebBrowser.maybeCompleteAuthSession();
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [user, setUser] = useState(null);
+  const [request, response, googleSignIn] = Google.useAuthRequest({
+    redirectUri: makeRedirectUri({
+      scheme: "com.martinimugs.checkedin",
+    }),
+    expoClientId: process.env.EXPO_PUBLIC_FIREBASE_EXPO_CLIENT_ID,
+    webClientId: process.env.EXPO_PUBLIC_FIREBASE_WEB_CLIENT_ID,
+    iosClientId: process.env.EXPO_PUBLIC_FIREBASE_IOS_CLIENT_ID,
+    androidClientId: process.env.EXPO_PUBLIC_FIREBASE_ANDROID_CLIENT_ID,
+  });
 
   useEffect(() => {
-    configureGoogleSignIn();
-    getCurrentUser();
-  }, []);
+    if (response?.type == "success") {
+      const { id_token, access_token } = response?.params;
 
-  const configureGoogleSignIn = async () => {
-    await GoogleSignin.configure({
-      webClientId: Config.GOOGLE_SIGN_IN_CLIENT_ID,
-    });
-  };
-
-  const getCurrentUser = async () => {
-    try {
-      const currentUser: any = await GoogleSignin.getCurrentUser();
-      setUser(currentUser);
-    } catch (error) {
-      console.error('Error getting current user:', error);
+      //@ts-ignore
+      const credential = GoogleAuthProvider.credential(id_token);
+      signInWithCredential(auth, credential);
     }
-  };
+  }, [response]);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, firebaseUser => {
-      setUser(firebaseUser);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        const userInfo = {
+          displayName: firebaseUser?.displayName,
+          isAnonymous: firebaseUser?.isAnonymous,
+          emailVerified: firebaseUser?.emailVerified,
+          ...firebaseUser?.providerData?.at(0),
+        };
+        setUser(userInfo);
+        addUserToFirestore(userInfo);
+      } else {
+        console.log("Logged out user");
+      }
     });
     return () => unsubscribe();
   }, []);
-
-  const googleSignIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const {user}: any = await GoogleSignin.signIn();
-      // Store user info in the client side AuthContext
-      setUser(user);
-      // Store user in Firebase Firestore cloud
-      addUserToFirestore(user);
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
 
   const signOut = async () => {
     await FirebaseSignOut(auth);
@@ -78,7 +82,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
   };
 
   return (
-    <AuthContext.Provider value={{user, googleSignIn, signOut}}>
+    <AuthContext.Provider value={{ user, googleSignIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );

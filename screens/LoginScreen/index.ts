@@ -1,1 +1,1 @@
-export {default as LoginScreen} from './LoginScreen.tsx';
+export { default as LoginScreen } from "./LoginScreen";
