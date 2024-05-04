@@ -5,6 +5,8 @@ import {
   doc,
   setDoc,
   addDoc,
+  getDoc,
+  getDocs,
 } from "firebase/firestore";
 import {
   signInWithCredential,
@@ -41,6 +43,8 @@ export {
   doc,
   setDoc,
   addDoc,
+  getDoc,
+  getDocs,
   onAuthStateChanged,
   signInWithCredential,
   GoogleAuthProvider,
